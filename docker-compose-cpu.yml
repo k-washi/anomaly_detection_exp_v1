@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  ml-dev:
+    build: 
+      context: .
+      dockerfile: ./.docker/Dockerfile.cpu
+    container_name: ml-dev
+    image: ml-dev-image
+    shm_size: '24gb'
+    tty: true
+    env_file:
+      - .env
+    volumes: 
+      - $PWD:/workspace
+    command: '/bin/bash'
+    ports:
+      - 18081-18090:18081-18090
