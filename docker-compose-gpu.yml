@@ -1,12 +1,12 @@
 version: '3'
 
 services:
-  ml-dev:
+  ml-dev-ad:
     build:
       context: .
       dockerfile: ./.docker/Dockerfile.gpu
-    container_name: ml-dev
-    image: ml-dev-image
+    container_name: ml-dev-ad
+    image: ml-dev-ad-image
     shm_size: '24gb'
     tty: true
     env_file:
@@ -15,7 +15,7 @@ services:
       - $PWD:/workspace
     command: '/bin/bash'
     ports:
-      - 18081-18090:18081-18090
+      - 18141-18150:18141-18150
     deploy:
       resources:
         reservations:
