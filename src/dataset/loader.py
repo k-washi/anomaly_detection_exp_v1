@@ -30,16 +30,16 @@ def data_loader_setup(
             pin_memory=cfg.ml.pin_memory,
             drop_last=True
         )
-    
     else:
         return DataLoader(
             dataset,
             batch_size=cfg.ml.batch_size,
             shuffle=False,
-            drop_last=False,
             num_workers=cfg.ml.num_workers,
-            pin_memory=cfg.ml.pin_memory
+            pin_memory=cfg.ml.pin_memory,
+            drop_last=False
         )
+
 
 class DataModule(LightningDataModule):
     def __init__(self, cfg:Config) -> None:
@@ -48,12 +48,13 @@ class DataModule(LightningDataModule):
     def setup(self, stage=None):
         if stage == "fit" or stage is None:
             self.cfg.ml.phase = "train"
-        
         if stage == "test":
             self.cfg.ml.phase = "test"
             
     def train_dataloader(self):
+        self.cfg.ml.phase = "train"
         return data_loader_setup(self.cfg)
     
     def test_dataloader(self):
+        self.cfg.ml.phase = "test"
         return data_loader_setup(self.cfg)

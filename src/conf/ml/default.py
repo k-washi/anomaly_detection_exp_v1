@@ -6,6 +6,7 @@ class TrainConfig:
     seed:int =  3407
     learning_rate: float = 0.001
     optimizer: str = 'AdamW'
+    epochs: int = 1
 
 @dataclass
 class MlConfig:
@@ -14,13 +15,19 @@ class MlConfig:
     batch_size: int = 32
     num_workers: int = 4
     pin_memory: bool = True
+    
 
 @dataclass
 class ModelConfig:
+    use_torchhub: bool = True
     torch_hub_version: str = 'pytorch/vision:v0.9.0'
     torch_hub_model: str = 'wide_resnet50_2'
     pretrained: bool = True
-
+    
+    # patchcore
+    patchcore_coreset_sampling_rate: float = 0.001
+    patchcore_n_neighbors: int = 9
+    
 @dataclass
 class ImageDatasetConfig:
     img_dir: str = "./data/mvtec_ad/bottle"
@@ -31,5 +38,7 @@ class ImageDatasetConfig:
     load_size: int = 256
     input_size: int = 254
 
+@dataclass
 class PlotConfig:
     save_dir: str = "./data/mvtecad_result"
+    plot_img_size: int = 32

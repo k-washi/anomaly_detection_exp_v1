@@ -17,15 +17,17 @@ class Config:
     imdata: ImageDatasetConfig = ImageDatasetConfig()
     plot: PlotConfig = PlotConfig()
     model: ModelConfig = ModelConfig()
-    
+
 cs = ConfigStore.instance()
 cs.store(name="config", node=Config)
+
 
 @hydra.main(version_base=None, config_name="config")
 def config_print(cfg: Config) -> None:
     cfg = OmegaConf.to_yaml(cfg)
     print(cfg)
     
+
 
 if __name__ == "__main__":
     # python src/conf/config.py ml.batch_size=24

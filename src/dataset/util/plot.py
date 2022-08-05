@@ -72,7 +72,9 @@ def save_anomaly_map(save_dir, anomaly_map, input_img, gt_img, file_name, x_type
     # save images
     save_dir = Path(save_dir)
     save_dir.mkdir(exist_ok=True)
+    print(str(save_dir / f'{x_type}_{file_name}.jpg'))
     cv2.imwrite(str(save_dir / f'{x_type}_{file_name}.jpg'), input_img)
     cv2.imwrite(str(save_dir / f'{x_type}_{file_name}_amap.jpg'), anomaly_map_norm_hm)
     cv2.imwrite(str(save_dir / f'{x_type}_{file_name}_amap_on_img.jpg'), hm_on_img)
     cv2.imwrite(str(save_dir / f'{x_type}_{file_name}_gt.jpg'), gt_img)
+
