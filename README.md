@@ -1,58 +1,6 @@
-# ml-exp-env
-機械学習実験環境
+# ml-exp-ad
 
-# 環境変数など
-
-.envに記載する
-
-```s
-# naptune.ai実験管理用
-NEPTUNE_AI_API_TOKEN=xxx
-```
-
-環境変数取得関数の修正が必要。
-```s
-src/util/load_env.py
-```
-
-# AWS周りの環境設定
-
-もし、Data Version Controlなどを使用する場合に必要となる。
-
-- awsのクレデンシャル設定
-
-```
-aws configure
-```
-
-- aws cdkを使用する (データをs3で管理する場合など)
-
-```
-cd src/cdk/setup
-cdk synth
-cdk bootstrap
-```
-
-- 必要だった権限について
-
-```
-IAMFullAccess
-AmazonEC2ContainerRegistryFullAccess
-AmazonS3FullAccess
-AmazonSSMFullAccess
-AWSCloudFormationFullAccess
-AWSLambda_FullAccess
-```
-
-適宜、修正、追加を行ってください。
-
-- 新しいスタックを作成する場合
-
-```
-cdk init setup --language=python
-```
-
-また、`cdk destroy`などで、データの削除を行う予定がない場合、`src/cdk/setup/setup/setup_stack.py`のremoval_policyを削除すると良い。
+異常検知の実験
 
 # 実行環境作成(エディターモード)
 
@@ -122,25 +70,6 @@ docker-compose -f docker-compose-cpu.yml up -d
 runtime: nvidia
 ```
 
-# ローカル環境で仮想環境の作成
-
-```
-python -m venv .venv
-```
-
-```
-source .venv/bin/activate
-```
-
-```
-deactivate
-```
-
-versoinを変更したい場合、最初にpythonのバージョンを変更する。
-```
-pyenv local 3.8.0
-```
-
 # vscode extensionの設定
 
 1. view/command palletを開き、shellからcodeをインストール
@@ -150,39 +79,3 @@ pyenv local 3.8.0
 ```
 ./.devcontainer/vscode_extentions_install_batch.sh
 ```
-
-# データのバージョンコーントロール
-
-```
-dvc init
-dvc remote add -d storage s3://ml-ops-sample-bucket/dvcstore
-
-dvc pull
-```
-
-## データを変更した場合
-
-```
-dvc add data
-dvc push
-```
-
-もしからしたら、
-```
-pip install dvc[s3]
-```
-が必要かも。
-
-## .dvcをgitに保存する
-
-```
-git add .dvc
-git commit -m "add data"
-git push origin repo
-git checkout <>
-dvc checkout
-```
-
-# 実験のトラッキング
-
-neptuneでトラッキングする例 `src/sample/neptune_train.py`
