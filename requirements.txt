@@ -55,3 +55,4 @@ pyopenjtalk>=0.1.0
 neptune-client==0.14.3
 dvc==2.9.5
 
+nptyping==2.2.0

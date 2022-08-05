@@ -2,6 +2,10 @@
 
 異常検知の実験
 
+# データセット
+
+- [MVTEC Anomaly detection dataset](https://www.mvtec.com/company/research/datasets/mvtec-ad/)
+
 # 実行環境作成(エディターモード)
 
 `src.util.~`などモジュールのimportを行うために必要です。

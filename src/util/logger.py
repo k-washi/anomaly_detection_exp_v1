@@ -6,7 +6,7 @@ from typing import Dict, Optional
 _log_initialized: Dict[str, logging.Logger] = {}
 
 def get_logger(
-    debug: bool = False,
+    debug: bool = True,
     filename: Optional[str] = None,
     name: str = "main",
     add_stream_handler: bool = True,
