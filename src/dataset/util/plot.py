@@ -59,10 +59,12 @@ def cal_confusion_matrix(y_true, y_pred_no_thresh, thresh, img_path_list):
     print('false negative')
     print(false_n)
 
-def save_anomaly_map(save_dir, anomaly_map, input_img, gt_img, file_name, x_type):
+def save_anomaly_map(save_dir, anomaly_map, input_img, gt_img, file_name, x_type, norm_max=3):
     if anomaly_map.shape != input_img.shape:
         anomaly_map = cv2.resize(anomaly_map, (input_img.shape[0], input_img.shape[1]))
-    anomaly_map_norm = min_max_norm(anomaly_map)
+    print(f"ano map min: {anomaly_map.min()} max: {anomaly_map.max()} in {file_name}")
+    anomaly_map[anomaly_map > norm_max] = norm_max
+    anomaly_map_norm = (anomaly_map - anomaly_map.min()) / norm_max
     anomaly_map_norm_hm = cvt2heatmap(anomaly_map_norm*255)
 
     # anomaly map on image

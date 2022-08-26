@@ -49,6 +49,24 @@ def embedding_concat(x, y):
     z = F.fold(z, kernel_size=s, output_size=(H1, W1), stride=s) # 2, 1536, 32, 32 # 小さい方の画像はupサンプリングしたものに相当
     return z
 
+def embedding_concat(x, y):
+    """
+    yをxに合わせてアップサンプリング
+    Args:
+        x (_type_): torch.Size([2, 512, 32, 32])
+        y (_type_): torch.Size([2, 1024, 16, 16])
+
+    Returns:
+        _type_: _description_
+    """
+    # from https://github.com/xiahaifeng1995/PaDiM-Anomaly-Detection-Localization-master
+    B, C1, H1, W1 = x.size()
+    _, C2, H2, W2 = y.size()
+    s = int(H1 / H2) # 2
+    y = F.interpolate(y, scale_factor=s, mode="bilinear")
+    z = torch.cat([x, y], dim=1)
+    return z
+    
 
 def reshape_embedding(embedding):
     """チャンネル数分の特徴量を32x32xbatchの位置に対して作成
@@ -143,7 +161,7 @@ class PatchCoreModelModule(LightningModule):
         embeddings = []
         for feature in features:
             m = torch.nn.AvgPool2d(3, 1, 1)
-            embeddings.append(m(feature))
+            embeddings.append(m(feature.cpu()))
         embedding = embedding_concat(embeddings[0], embeddings[1])
         self.embedding_list.extend(reshape_embedding(np.array(embedding)))
     
@@ -176,7 +194,7 @@ class PatchCoreModelModule(LightningModule):
             m = torch.nn.AvgPool2d(3, 1, 1)
             embeddings.append(m(feature))
         embedding_ = embedding_concat(embeddings[0], embeddings[1])
-        embedding_test = np.array(reshape_embedding(np.array(embedding_)))
+        embedding_test = np.array(reshape_embedding(np.array(embedding_.cpu())))
         # NN
         nbrs = NearestNeighbors(n_neighbors=self.cfg.model.patchcore_n_neighbors, algorithm='ball_tree', metric='minkowski', p=2).fit(self.embedding_coreset)
         score_patches, _ = nbrs.kneighbors(embedding_test)
